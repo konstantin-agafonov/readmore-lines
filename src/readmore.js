@@ -254,30 +254,36 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
     readMoreLink.innerText = READ_MORE_LABEL
     readMoreLink.classList.add(READ_MORE_LINK_CLASS)
 
-    // Insert the link after the target element with error handling
-    try {
-        targetElement.parentNode.insertBefore(readMoreLink, targetElement.nextSibling)
-    } catch (error) {
-        console.error('ReadMore: Failed to insert toggle link', error);
-        return;
-    }
-
-    // Apply the truncation class to the target element
-    targetElement.classList.add(READ_MORE_TARGET_CLASS);
+    // Use requestAnimationFrame for smooth DOM operations
+    requestAnimationFrame(() => {
+        try {
+            // Insert the link after the target element with error handling
+            targetElement.parentNode.insertBefore(readMoreLink, targetElement.nextSibling);
+            
+            // Apply the truncation class to the target element
+            targetElement.classList.add(READ_MORE_TARGET_CLASS);
+        } catch (error) {
+            console.error('ReadMore: Failed to insert toggle link', error);
+            return;
+        }
+    });
     
     // Add click event listener for toggle functionality
     readMoreLink.addEventListener('click', function (event) {
         event.preventDefault()
         
-        // Toggle the truncation class
-        targetElement.classList.toggle(READ_MORE_TARGET_CLASS);
-        
-        // Update link text based on current state
-        if (targetElement.classList.contains(READ_MORE_TARGET_CLASS)){
-            readMoreLink.innerText = READ_MORE_LABEL;
-        } else {
-            readMoreLink.innerText = READ_LESS_LABEL;
-        }
+        // Use requestAnimationFrame for smooth DOM updates
+        requestAnimationFrame(() => {
+            // Toggle the truncation class
+            targetElement.classList.toggle(READ_MORE_TARGET_CLASS);
+            
+            // Update link text based on current state
+            if (targetElement.classList.contains(READ_MORE_TARGET_CLASS)){
+                readMoreLink.innerText = READ_MORE_LABEL;
+            } else {
+                readMoreLink.innerText = READ_LESS_LABEL;
+            }
+        });
     }.bind(this))
 
     // Mark element as having readmore functionality enabled
