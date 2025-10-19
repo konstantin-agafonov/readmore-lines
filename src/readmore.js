@@ -7,17 +7,63 @@
  * @since 2025
  */
 
+// Global cache to track added CSS styles
+const CSS_CACHE = new Set();
+
 /**
- * Utility function to add CSS styles to the document head.
- * This function creates a new style element and appends it to the document head.
+ * Clears the CSS cache and removes all readmore styles from the document.
+ * This function can be used to reset the library state.
  * 
- * @param {string} styleString - The CSS string to be added to the document
  * @returns {void}
  */
-function addStyle(styleString) {
-    const style = document.createElement('style')
-    style.textContent = styleString
-    document.head.append(style)
+function clearReadMoreCache() {
+    // Remove all readmore style elements from the document
+    const readmoreStyles = document.head.querySelectorAll('[data-readmore-cache]');
+    readmoreStyles.forEach(style => style.remove());
+    
+    // Clear the cache
+    CSS_CACHE.clear();
+}
+
+/**
+ * Checks if CSS styles for a specific configuration are already cached.
+ * 
+ * @param {string} cacheKey - The cache key to check
+ * @returns {boolean} True if styles are cached, false otherwise
+ */
+function isStyleCached(cacheKey) {
+    return CSS_CACHE.has(cacheKey);
+}
+
+/**
+ * Utility function to add CSS styles to the document head with caching.
+ * This function creates a new style element and appends it to the document head,
+ * but only if the styles haven't been added before.
+ * 
+ * @param {string} styleString - The CSS string to be added to the document
+ * @param {string} cacheKey - Unique identifier for the CSS to prevent duplicates
+ * @returns {void}
+ */
+function addStyle(styleString, cacheKey) {
+    // Check if styles with this cache key already exist in our global cache
+    if (CSS_CACHE.has(cacheKey)) {
+        return; // Styles already added, skip
+    }
+    
+    // Check if styles with this cache key already exist in the DOM
+    const existingStyle = document.head.querySelector(`[data-readmore-cache="${cacheKey}"]`);
+    if (existingStyle) {
+        CSS_CACHE.add(cacheKey); // Add to cache for future reference
+        return; // Styles already added, skip
+    }
+    
+    const style = document.createElement('style');
+    style.textContent = styleString;
+    style.setAttribute('data-readmore-cache', cacheKey);
+    document.head.append(style);
+    
+    // Add to cache to prevent future duplicates
+    CSS_CACHE.add(cacheKey);
 }
 
 /**
@@ -145,7 +191,9 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
         return
     }
 
-    // Add CSS styles for text truncation using webkit-line-clamp
+    // Add CSS styles for text truncation using webkit-line-clamp with caching
+    // Create a unique cache key based on target class and line limit
+    const cssCacheKey = `readmore-styles-${READ_MORE_TARGET_CLASS}-${LINES_LIMIT}`;
     addStyle(`
         .${READ_MORE_TARGET_CLASS} {
             display: -webkit-box;
@@ -154,7 +202,7 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
             -webkit-line-clamp: ${LINES_LIMIT};
             -webkit-box-orient: vertical;
         }
-    `);
+    `, cssCacheKey);
 
     // Create the toggle link element
     const readMoreLink = document.createElement('a')
