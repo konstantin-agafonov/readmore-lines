@@ -10,6 +10,9 @@
 // Global cache to track added CSS styles
 const CSS_CACHE = new Set();
 
+// Global cache to store computed line heights for elements
+const LINE_HEIGHT_CACHE = new WeakMap();
+
 /**
  * Clears the CSS cache and removes all readmore styles from the document.
  * This function can be used to reset the library state.
@@ -21,8 +24,11 @@ function clearReadMoreCache() {
     const readmoreStyles = document.head.querySelectorAll('[data-readmore-cache]');
     readmoreStyles.forEach(style => style.remove());
     
-    // Clear the cache
+    // Clear the CSS cache
     CSS_CACHE.clear();
+    
+    // Note: Line height cache uses WeakMap which is automatically garbage collected
+    // when elements are removed from the DOM, so no manual clearing is needed
 }
 
 /**
@@ -33,6 +39,29 @@ function clearReadMoreCache() {
  */
 function isStyleCached(cacheKey) {
     return CSS_CACHE.has(cacheKey);
+}
+
+/**
+ * Checks if line height is cached for a specific element.
+ * 
+ * @param {HTMLElement} element - The element to check
+ * @returns {boolean} True if line height is cached, false otherwise
+ */
+function isLineHeightCached(element) {
+    return LINE_HEIGHT_CACHE.has(element);
+}
+
+/**
+ * Invalidates the line height cache for an element.
+ * This should be called when an element's styles change and line height needs recalculation.
+ * 
+ * @param {HTMLElement} element - The element to invalidate cache for
+ * @returns {void}
+ */
+function invalidateLineHeightCache(element) {
+    if (element) {
+        LINE_HEIGHT_CACHE.delete(element);
+    }
 }
 
 /**
@@ -67,13 +96,23 @@ function addStyle(styleString, cacheKey) {
 }
 
 /**
- * Gets the computed line height of an element in pixels.
+ * Gets the computed line height of an element in pixels with caching.
+ * This function caches the computed line height to avoid repeated calculations.
  * 
  * @param {HTMLElement} element - The DOM element to get the line height from
  * @returns {number} The line height in pixels, or NaN if unable to determine
  */
 function getLineHeight(element) {
-    return parseInt(window.getComputedStyle(element).lineHeight, 10)
+    // Check if line height is already cached for this element
+    if (LINE_HEIGHT_CACHE.has(element)) {
+        return LINE_HEIGHT_CACHE.get(element);
+    }
+    
+    // Calculate line height and cache it
+    const lineHeight = parseInt(window.getComputedStyle(element).lineHeight, 10);
+    LINE_HEIGHT_CACHE.set(element, lineHeight);
+    
+    return lineHeight;
 }
 
 /**
@@ -103,6 +142,11 @@ function countLines(element) {
 /**
  * Main function that implements the "read more/read less" functionality.
  * This function truncates long text content and adds a toggle link to expand/collapse the content.
+ * 
+ * Performance optimizations:
+ * - CSS styles are cached to prevent duplicate additions
+ * - Line height calculations are cached per element
+ * - Uses WeakMap for automatic garbage collection of cached values
  * 
  * @param {Object} options - Configuration object for the readmore functionality
  * @param {HTMLElement} options.targetElement - The DOM element to apply readmore functionality to (required, must have a parent node)
