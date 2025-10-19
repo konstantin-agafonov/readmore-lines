@@ -38,13 +38,20 @@ function getLineHeight(element) {
  * @returns {number} The number of lines, or NaN if unable to calculate
  */
 function countLines(element) {
+    // Validate input
+    if (!element || !(element instanceof HTMLElement)) {
+        return NaN;
+    }
+    
     const divHeight = element.offsetHeight
     const lineHeight = getLineHeight(element)
+    
     // Return NaN if either height or line height cannot be determined
-    if (isNaN(lineHeight) || isNaN(divHeight)) {
+    if (isNaN(lineHeight) || isNaN(divHeight) || lineHeight <= 0 || divHeight <= 0) {
         return NaN
     }
-    return divHeight / lineHeight
+    
+    return Math.round(divHeight / lineHeight)
 }
 
 /**
@@ -52,13 +59,14 @@ function countLines(element) {
  * This function truncates long text content and adds a toggle link to expand/collapse the content.
  * 
  * @param {Object} options - Configuration object for the readmore functionality
- * @param {HTMLElement} options.targetElement - The DOM element to apply readmore functionality to
- * @param {string} [options.readMoreLabel='Read more...'] - Text for the "read more" link
- * @param {string} [options.readLessLabel='Read less'] - Text for the "read less" link
- * @param {string} [options.targetClass='read-more-target'] - CSS class to apply to the target element
- * @param {string} [options.linkClass='read-more-link'] - CSS class to apply to the toggle link
- * @param {number} [options.linesLimit=8] - Maximum number of lines to show before truncating
- * @returns {void}
+ * @param {HTMLElement} options.targetElement - The DOM element to apply readmore functionality to (required, must have a parent node)
+ * @param {string} [options.readMoreLabel='Read more...'] - Text for the "read more" link (must be a string if provided)
+ * @param {string} [options.readLessLabel='Read less'] - Text for the "read less" link (must be a string if provided)
+ * @param {string} [options.targetClass='read-more-target'] - CSS class to apply to the target element (must be a string if provided)
+ * @param {string} [options.linkClass='read-more-link'] - CSS class to apply to the toggle link (must be a string if provided)
+ * @param {number} [options.linesLimit=8] - Maximum number of lines to show before truncating (must be a positive integer if provided)
+ * @returns {void} Returns early with error logging if validation fails
+ * @throws {Error} Logs errors to console for invalid inputs
  * 
  * @example
  * // Basic usage
@@ -77,6 +85,49 @@ function countLines(element) {
  * });
  */
 function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, linkClass, linesLimit}) {
+    // Input validation for targetElement
+    if (!targetElement) {
+        console.error('ReadMore: targetElement is required and cannot be null or undefined');
+        return;
+    }
+    
+    if (!(targetElement instanceof HTMLElement)) {
+        console.error('ReadMore: targetElement must be a valid HTMLElement');
+        return;
+    }
+    
+    if (!targetElement.parentNode) {
+        console.error('ReadMore: targetElement must have a parent node to insert the toggle link');
+        return;
+    }
+    
+    // Validate linesLimit if provided
+    if (linesLimit !== undefined && (typeof linesLimit !== 'number' || linesLimit < 1 || !Number.isInteger(linesLimit))) {
+        console.error('ReadMore: linesLimit must be a positive integer');
+        return;
+    }
+    
+    // Validate string parameters
+    if (readMoreLabel !== undefined && typeof readMoreLabel !== 'string') {
+        console.error('ReadMore: readMoreLabel must be a string');
+        return;
+    }
+    
+    if (readLessLabel !== undefined && typeof readLessLabel !== 'string') {
+        console.error('ReadMore: readLessLabel must be a string');
+        return;
+    }
+    
+    if (targetClass !== undefined && typeof targetClass !== 'string') {
+        console.error('ReadMore: targetClass must be a string');
+        return;
+    }
+    
+    if (linkClass !== undefined && typeof linkClass !== 'string') {
+        console.error('ReadMore: linkClass must be a string');
+        return;
+    }
+    
     // Set default values for configuration options
     const LINES_LIMIT = linesLimit || 8
     const READ_MORE_LINK_CLASS = linkClass || 'read-more-link'
@@ -111,8 +162,13 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
     readMoreLink.innerText = READ_MORE_LABEL
     readMoreLink.classList.add(READ_MORE_LINK_CLASS)
 
-    // Insert the link after the target element
-    targetElement.parentNode.insertBefore(readMoreLink, targetElement.nextSibling)
+    // Insert the link after the target element with error handling
+    try {
+        targetElement.parentNode.insertBefore(readMoreLink, targetElement.nextSibling)
+    } catch (error) {
+        console.error('ReadMore: Failed to insert toggle link', error);
+        return;
+    }
 
     // Apply the truncation class to the target element
     targetElement.classList.add(READ_MORE_TARGET_CLASS);
