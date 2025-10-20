@@ -5,7 +5,6 @@ A lightweight, high-performance JavaScript library for creating "read more/read 
 ## Features
 
 - 🚀 **High Performance**: Cached line height calculations and CSS styles
-- 🎯 **Smooth Animations**: Uses `requestAnimationFrame` for optimal DOM updates
 - 🧠 **Smart Caching**: Automatic memory management with WeakMap
 - 📱 **Responsive**: Works with any text content and container size
 - ♿ **Accessible**: Proper ARIA attributes and keyboard support
@@ -42,19 +41,6 @@ readmore({
 });
 ```
 
-### Advanced Configuration
-
-```javascript
-readmore({
-    targetElement: document.querySelector('.content'),
-    readMoreLabel: 'Show more...',
-    readLessLabel: 'Show less',
-    linesLimit: 3,
-    targetClass: 'custom-truncate',
-    linkClass: 'custom-link'
-});
-```
-
 ## API Reference
 
 ### `readmore(options)`
@@ -83,42 +69,6 @@ readmore({
     targetClass: 'article-truncate',
     linkClass: 'read-more-button'
 });
-```
-
-### Utility Functions
-
-#### `clearReadMoreCache()`
-
-Clears all cached CSS styles and resets the library state.
-
-```javascript
-import { clearReadMoreCache } from 'readmore-lines';
-
-clearReadMoreCache();
-```
-
-#### `isStyleCached(cacheKey)`
-
-Checks if CSS styles for a specific configuration are already cached.
-
-```javascript
-import { isStyleCached } from 'readmore-lines';
-
-if (isStyleCached('readmore-styles-read-more-target-5')) {
-    console.log('Styles already cached');
-}
-```
-
-#### `invalidateLineHeightCache(element)`
-
-Invalidates the line height cache for a specific element. Useful when element styles change.
-
-```javascript
-import { invalidateLineHeightCache } from 'readmore-lines';
-
-// When element styles change
-element.style.fontSize = '20px';
-invalidateLineHeightCache(element);
 ```
 
 ## Styling
@@ -175,7 +125,6 @@ You can customize the appearance by targeting the generated classes:
 
 ### Optimization Features
 
-- `requestAnimationFrame` for smooth DOM updates
 - Efficient line height calculations
 - Minimal DOM queries
 - Automatic cache invalidation
@@ -192,22 +141,6 @@ document.querySelectorAll('.truncate').forEach(element => {
         linesLimit: 3
     });
 });
-```
-
-### Dynamic Content
-
-```javascript
-// Handle dynamic content updates
-function updateContent(element, newContent) {
-    element.innerHTML = newContent;
-    
-    // Invalidate cache and reapply
-    invalidateLineHeightCache(element);
-    readmore({
-        targetElement: element,
-        linesLimit: 4
-    });
-}
 ```
 
 ### Custom Styling
@@ -287,7 +220,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Initial release
 - Core readmore functionality
 - CSS and line height caching
-- Performance optimizations with requestAnimationFrame
 - TypeScript support
 - Comprehensive documentation
 
