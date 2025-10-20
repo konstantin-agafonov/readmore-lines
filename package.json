@@ -1,5 +1,5 @@
 {
-  "name": "readmore-js",
+  "name": "readmore-lines",
   "version": "1.0.0",
   "description": "A lightweight JavaScript library for creating 'read more/read less' functionality with text truncation",
   "main": "dist/readmore.js",
@@ -34,12 +34,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/konstantin-agafonov/readmore-js.git"
+    "url": "https://github.com/konstantin-agafonov/readmore-lines.git"
   },
   "bugs": {
-    "url": "https://github.com/konstantin-agafonov/readmore-js/issues"
+    "url": "https://github.com/konstantin-agafonov/readmore-lines/issues"
   },
-  "homepage": "https://github.com/konstantin-agafonov/readmore-js#readme",
+  "homepage": "https://github.com/konstantin-agafonov/readmore-lines#readme",
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.23.0",

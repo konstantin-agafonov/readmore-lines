@@ -16,17 +16,17 @@ A lightweight, high-performance JavaScript library for creating "read more/read 
 
 ### npm
 ```bash
-npm install readmore-js
+npm install readmore-lines
 ```
 
 ### yarn
 ```bash
-yarn add readmore-js
+yarn add readmore-lines
 ```
 
 ### CDN
 ```html
-<script src="https://unpkg.com/readmore-js@latest/dist/readmore.js"></script>
+<script src="https://unpkg.com/readmore-lines@latest/dist/readmore.js"></script>
 ```
 
 ## Quick Start
@@ -34,7 +34,7 @@ yarn add readmore-js
 ### Basic Usage
 
 ```javascript
-import readmore from 'readmore-js';
+import readmore from 'readmore-lines';
 
 // Simple implementation
 readmore({
@@ -92,7 +92,7 @@ readmore({
 Clears all cached CSS styles and resets the library state.
 
 ```javascript
-import { clearReadMoreCache } from 'readmore-js';
+import { clearReadMoreCache } from 'readmore-lines';
 
 clearReadMoreCache();
 ```
@@ -102,7 +102,7 @@ clearReadMoreCache();
 Checks if CSS styles for a specific configuration are already cached.
 
 ```javascript
-import { isStyleCached } from 'readmore-js';
+import { isStyleCached } from 'readmore-lines';
 
 if (isStyleCached('readmore-styles-read-more-target-5')) {
     console.log('Styles already cached');
@@ -114,7 +114,7 @@ if (isStyleCached('readmore-styles-read-more-target-5')) {
 Invalidates the line height cache for a specific element. Useful when element styles change.
 
 ```javascript
-import { invalidateLineHeightCache } from 'readmore-js';
+import { invalidateLineHeightCache } from 'readmore-lines';
 
 // When element styles change
 element.style.fontSize = '20px';
@@ -259,7 +259,7 @@ npm run lint
 ### Project Structure
 
 ```
-readmore-js/
+readmore-lines/
 ├── src/
 │   ├── readmore.js      # Main library file
 │   └── readmore.d.ts    # TypeScript declarations
@@ -293,7 +293,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-If you encounter any issues or have questions, please file an issue on [GitHub](https://github.com/konstantin-agafonov/readmore-js/issues).
+If you encounter any issues or have questions, please file an issue on [GitHub](https://github.com/konstantin-agafonov/readmore-lines/issues).
 
 ---
 
