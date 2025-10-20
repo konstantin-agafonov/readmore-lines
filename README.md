@@ -7,7 +7,7 @@ A lightweight, high-performance JavaScript library for creating "read more/read 
 - 🚀 **High Performance**: Cached line height calculations and CSS styles
 - 🧠 **Smart Caching**: Automatic memory management with WeakMap
 - 📱 **Responsive**: Works with any text content and container size
-- ♿ **Accessible**: Proper ARIA attributes and keyboard support
+- ♿ **Accessible**: ARIA attributes, keyboard navigation, and semantic HTML
 - 🎨 **Customizable**: Flexible styling and configuration options
 - 📦 **Lightweight**: No external dependencies, ~3KB minified
 
@@ -106,6 +106,23 @@ You can customize the appearance by targeting the generated classes:
     text-decoration: underline;
 }
 ```
+
+## Accessibility Features
+
+### ARIA Support
+- **aria-expanded**: Automatically updates to reflect content state
+- **aria-controls**: Links button to controlled content
+- **role="button"**: Proper semantic role for screen readers
+
+### Keyboard Navigation
+- **Enter key**: Activates the toggle functionality
+- **Space key**: Activates the toggle functionality
+- **Tab navigation**: Button is focusable and follows tab order
+
+### Semantic HTML
+- Uses `<button>` element instead of `<a>` for better semantics
+- Automatically assigns unique IDs for proper ARIA relationships
+- Maintains focus management during interactions
 
 ## Browser Support
 

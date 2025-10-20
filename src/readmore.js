@@ -103,19 +103,25 @@ function countLines(element) {
 
 /**
  * Main function that implements the "read more/read less" functionality.
- * This function truncates long text content and adds a toggle link to expand/collapse the content.
+ * This function truncates long text content and adds a toggle button to expand/collapse the content.
  * 
  * Performance optimizations:
  * - CSS styles are cached to prevent duplicate additions
  * - Line height calculations are cached per element
  * - Uses WeakMap for automatic garbage collection of cached values
  * 
+ * Accessibility features:
+ * - Uses semantic button element instead of anchor
+ * - Includes aria-expanded attribute for screen readers
+ * - Supports keyboard navigation (Enter and Space keys)
+ * - Automatically assigns unique IDs for aria-controls
+ * 
  * @param {Object} options - Configuration object for the readmore functionality
  * @param {HTMLElement} options.targetElement - The DOM element to apply readmore functionality to (required, must have a parent node)
- * @param {string} [options.readMoreLabel='Read more...'] - Text for the "read more" link (must be a string if provided)
- * @param {string} [options.readLessLabel='Read less'] - Text for the "read less" link (must be a string if provided)
+ * @param {string} [options.readMoreLabel='Read more...'] - Text for the "read more" button (must be a string if provided)
+ * @param {string} [options.readLessLabel='Read less'] - Text for the "read less" button (must be a string if provided)
  * @param {string} [options.targetClass='read-more-target'] - CSS class to apply to the target element (must be a string if provided)
- * @param {string} [options.linkClass='read-more-link'] - CSS class to apply to the toggle link (must be a string if provided)
+ * @param {string} [options.linkClass='read-more-link'] - CSS class to apply to the toggle button (must be a string if provided)
  * @param {number} [options.linesLimit=8] - Maximum number of lines to show before truncating (must be a positive integer if provided)
  * @returns {void} Returns early with error logging if validation fails
  * @throws {Error} Logs errors to console for invalid inputs
@@ -217,11 +223,21 @@ function readmore({
         }
     `, cssCacheKey);
 
-    // Create the toggle link element
-    const readMoreLink = document.createElement('a');
-    readMoreLink.href = '#';
+    // Create the toggle link element with accessibility attributes
+    const readMoreLink = document.createElement('button');
+    readMoreLink.type = 'button';
     readMoreLink.innerText = READ_MORE_LABEL;
     readMoreLink.classList.add(READ_MORE_LINK_CLASS);
+    
+    // Add accessibility attributes
+    readMoreLink.setAttribute('aria-expanded', 'false');
+    readMoreLink.setAttribute('aria-controls', targetElement.id || `readmore-content-${Date.now()}`);
+    readMoreLink.setAttribute('role', 'button');
+    
+    // Ensure target element has an ID for aria-controls
+    if (!targetElement.id) {
+        targetElement.id = `readmore-content-${Date.now()}`;
+    }
 
     try {
         // Insert the link after the target element with error handling
@@ -233,20 +249,37 @@ function readmore({
         console.error('ReadMore: Failed to insert toggle link', error);
     }
     
-    // Add click event listener for toggle functionality
-    readMoreLink.addEventListener('click', (event) => {
-        event.preventDefault();
-
+    // Toggle functionality
+    const toggleContent = () => {
         // Toggle the truncation class
         targetElement.classList.toggle(READ_MORE_TARGET_CLASS);
-
+        
+        // Update aria-expanded attribute
+        const isExpanded = !targetElement.classList.contains(READ_MORE_TARGET_CLASS);
+        readMoreLink.setAttribute('aria-expanded', isExpanded.toString());
+        
         // Update link text based on current state
-        if (targetElement.classList.contains(READ_MORE_TARGET_CLASS)){
+        if (targetElement.classList.contains(READ_MORE_TARGET_CLASS)) {
             readMoreLink.innerText = READ_MORE_LABEL;
         } else {
             readMoreLink.innerText = READ_LESS_LABEL;
         }
-    })
+    };
+
+    // Add click event listener for toggle functionality
+    readMoreLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        toggleContent();
+    });
+
+    // Add keyboard event listener for accessibility
+    readMoreLink.addEventListener('keydown', (event) => {
+        // Handle Enter and Space keys
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            toggleContent();
+        }
+    });
 
     // Mark element as having readmore functionality enabled
     targetElement.dataset.readmoreLinesEnabled = '1';

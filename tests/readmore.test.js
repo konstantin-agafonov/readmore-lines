@@ -32,14 +32,18 @@ describe('ReadMore', () => {
       expect(targetElement.dataset.readmoreLinesEnabled).toBe('1');
     });
 
-    test('should create toggle link', () => {
-      readmore({ targetElement });
-      
-      const link = targetElement.nextElementSibling;
-      expect(link).toBeTruthy();
-      expect(link.tagName).toBe('A');
-      expect(link.classList.contains('read-more-link')).toBe(true);
-      expect(link.innerText).toBe('Read more...');
+    test('should create toggle button with accessibility attributes', () => {
+        readmore({ targetElement });
+        
+        const button = targetElement.nextElementSibling;
+        expect(button).toBeTruthy();
+        expect(button.tagName).toBe('BUTTON');
+        expect(button.type).toBe('button');
+        expect(button.classList.contains('read-more-link')).toBe(true);
+        expect(button.innerText).toBe('Read more...');
+        expect(button.getAttribute('aria-expanded')).toBe('false');
+        expect(button.getAttribute('role')).toBe('button');
+        expect(button.getAttribute('aria-controls')).toBe(targetElement.id);
     });
 
     test('should use custom labels', () => {
@@ -136,16 +140,85 @@ describe('ReadMore', () => {
       expect(link.innerText).toBe('Show more');
     });
 
-    test('should prevent default link behavior', () => {
-      readmore({ targetElement });
-      
-      const link = targetElement.nextElementSibling;
-      const clickEvent = new MouseEvent('click', { bubbles: true });
-      const preventDefaultSpy = jest.spyOn(clickEvent, 'preventDefault');
-      
-      link.dispatchEvent(clickEvent);
-      
-      expect(preventDefaultSpy).toHaveBeenCalled();
+    test('should prevent default button behavior', () => {
+        readmore({ targetElement });
+        
+        const button = targetElement.nextElementSibling;
+        const clickEvent = new MouseEvent('click', { bubbles: true });
+        const preventDefaultSpy = jest.spyOn(clickEvent, 'preventDefault');
+        
+        button.dispatchEvent(clickEvent);
+        
+        expect(preventDefaultSpy).toHaveBeenCalled();
+    });
+
+    test('should support keyboard navigation with Enter key', () => {
+        readmore({ targetElement });
+        
+        const button = targetElement.nextElementSibling;
+        
+        // Initial state
+        expect(button.getAttribute('aria-expanded')).toBe('false');
+        expect(targetElement.classList.contains('read-more-target')).toBe(true);
+        
+        // Simulate Enter key press
+        const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
+        const preventDefaultSpy = jest.spyOn(enterEvent, 'preventDefault');
+        
+        button.dispatchEvent(enterEvent);
+        
+        expect(preventDefaultSpy).toHaveBeenCalled();
+        expect(button.getAttribute('aria-expanded')).toBe('true');
+        expect(targetElement.classList.contains('read-more-target')).toBe(false);
+    });
+
+    test('should support keyboard navigation with Space key', () => {
+        readmore({ targetElement });
+        
+        const button = targetElement.nextElementSibling;
+        
+        // Initial state
+        expect(button.getAttribute('aria-expanded')).toBe('false');
+        
+        // Simulate Space key press
+        const spaceEvent = new KeyboardEvent('keydown', { key: ' ', bubbles: true });
+        const preventDefaultSpy = jest.spyOn(spaceEvent, 'preventDefault');
+        
+        button.dispatchEvent(spaceEvent);
+        
+        expect(preventDefaultSpy).toHaveBeenCalled();
+        expect(button.getAttribute('aria-expanded')).toBe('true');
+    });
+
+    test('should update aria-expanded attribute on toggle', () => {
+        readmore({ targetElement });
+        
+        const button = targetElement.nextElementSibling;
+        
+        // Initial state
+        expect(button.getAttribute('aria-expanded')).toBe('false');
+        
+        // Click to expand
+        button.click();
+        expect(button.getAttribute('aria-expanded')).toBe('true');
+        
+        // Click to collapse
+        button.click();
+        expect(button.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    test('should assign unique ID to target element if not present', () => {
+        // Remove any existing ID
+        targetElement.removeAttribute('id');
+        
+        readmore({ targetElement });
+        
+        const button = targetElement.nextElementSibling;
+        const targetId = targetElement.id;
+        const ariaControls = button.getAttribute('aria-controls');
+        
+        expect(targetId).toBeTruthy();
+        expect(ariaControls).toBe(targetId);
     });
   });
 
