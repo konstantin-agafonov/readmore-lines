@@ -47,38 +47,5 @@ export interface ReadMoreOptions {
  */
 export function readmore(options: ReadMoreOptions): void;
 
-/**
- * Clears the CSS cache and removes all readmore styles from the document.
- * This function can be used to reset the library state.
- * 
- * @returns void
- */
-export function clearReadMoreCache(): void;
-
-/**
- * Checks if CSS styles for a specific configuration are already cached.
- * 
- * @param cacheKey - The cache key to check
- * @returns True if styles are cached, false otherwise
- */
-export function isStyleCached(cacheKey: string): boolean;
-
-/**
- * Checks if line height is cached for a specific element.
- * 
- * @param element - The element to check
- * @returns True if line height is cached, false otherwise
- */
-export function isLineHeightCached(element: HTMLElement): boolean;
-
-/**
- * Invalidates the line height cache for an element.
- * This should be called when an element's styles change and line height needs recalculation.
- * 
- * @param element - The element to invalidate cache for
- * @returns void
- */
-export function invalidateLineHeightCache(element: HTMLElement): void;
-
 // Default export
 export default readmore;

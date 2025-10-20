@@ -14,44 +14,6 @@ const CSS_CACHE = new Set();
 const LINE_HEIGHT_CACHE = new WeakMap();
 
 /**
- * Clears the CSS cache and removes all readmore styles from the document.
- * This function can be used to reset the library state.
- * 
- * @returns {void}
- */
-function clearReadMoreCache() {
-    // Remove all readmore style elements from the document
-    const readmoreStyles = document.head.querySelectorAll('[data-readmore-cache]');
-    readmoreStyles.forEach(style => style.remove());
-    
-    // Clear the CSS cache
-    CSS_CACHE.clear();
-    
-    // Note: Line height cache uses WeakMap which is automatically garbage collected
-    // when elements are removed from the DOM, so no manual clearing is needed
-}
-
-/**
- * Checks if CSS styles for a specific configuration are already cached.
- * 
- * @param {string} cacheKey - The cache key to check
- * @returns {boolean} True if styles are cached, false otherwise
- */
-function isStyleCached(cacheKey) {
-    return CSS_CACHE.has(cacheKey);
-}
-
-/**
- * Checks if line height is cached for a specific element.
- * 
- * @param {HTMLElement} element - The element to check
- * @returns {boolean} True if line height is cached, false otherwise
- */
-function isLineHeightCached(element) {
-    return LINE_HEIGHT_CACHE.has(element);
-}
-
-/**
  * Invalidates the line height cache for an element.
  * This should be called when an element's styles change and line height needs recalculation.
  * 
@@ -264,12 +226,11 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
             targetElement.classList.add(READ_MORE_TARGET_CLASS);
         } catch (error) {
             console.error('ReadMore: Failed to insert toggle link', error);
-            return;
         }
     });
     
     // Add click event listener for toggle functionality
-    readMoreLink.addEventListener('click', function (event) {
+    readMoreLink.addEventListener('click', (event) => {
         event.preventDefault()
         
         // Use requestAnimationFrame for smooth DOM updates
@@ -284,7 +245,7 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
                 readMoreLink.innerText = READ_LESS_LABEL;
             }
         });
-    }.bind(this))
+    })
 
     // Mark element as having readmore functionality enabled
     targetElement.dataset.readmeEnabled = '1'
