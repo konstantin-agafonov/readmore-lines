@@ -20,44 +20,44 @@ const READMORE_INSTANCES = new WeakMap();
  * Instance data structure for tracking readmore instances
  */
 class ReadMoreInstance {
-  constructor(targetElement, button, config) {
-    this.targetElement = targetElement;
-    this.button = button;
-    this.config = config;
-    this.eventListeners = new Map();
-    this.isDestroyed = false;
-  }
-
-  addEventListener(type, listener) {
-    this.button.addEventListener(type, listener);
-    this.eventListeners.set(type, listener);
-  }
-
-  removeAllEventListeners() {
-    this.eventListeners.forEach((listener, type) => {
-      this.button.removeEventListener(type, listener);
-    });
-    this.eventListeners.clear();
-  }
-
-  destroy() {
-    if (this.isDestroyed) return;
-    
-    // Remove event listeners
-    this.removeAllEventListeners();
-    
-    // Remove button from DOM
-    if (this.button && this.button.parentNode) {
-      this.button.parentNode.removeChild(this.button);
+    constructor(targetElement, button, config) {
+        this.targetElement = targetElement;
+        this.button = button;
+        this.config = config;
+        this.eventListeners = new Map();
+        this.isDestroyed = false;
     }
-    
-    // Remove classes and data attributes
-    this.targetElement.classList.remove(this.config.targetClass);
-    delete this.targetElement.dataset.readmoreLinesEnabled;
-    
-    // Mark as destroyed
-    this.isDestroyed = true;
-  }
+
+    addEventListener(type, listener) {
+        this.button.addEventListener(type, listener);
+        this.eventListeners.set(type, listener);
+    }
+
+    removeAllEventListeners() {
+        this.eventListeners.forEach((listener, type) => {
+            this.button.removeEventListener(type, listener);
+        });
+        this.eventListeners.clear();
+    }
+
+    destroy() {
+        if (this.isDestroyed) return;
+        
+        // Remove event listeners
+        this.removeAllEventListeners();
+        
+        // Remove button from DOM
+        if (this.button && this.button.parentNode) {
+            this.button.parentNode.removeChild(this.button);
+        }
+        
+        // Remove classes and data attributes
+        this.targetElement.classList.remove(this.config.targetClass);
+        delete this.targetElement.dataset.readmoreLinesEnabled;
+        
+        // Mark as destroyed
+        this.isDestroyed = true;
+    }
 }
 
 /**
@@ -67,21 +67,21 @@ class ReadMoreInstance {
  * @returns {boolean} True if instance was found and destroyed, false otherwise
  */
 function destroyReadMore(targetElement) {
-  if (!targetElement || !(targetElement instanceof HTMLElement)) {
-    console.error('ReadMore: destroyReadMore requires a valid HTMLElement');
-    return false;
-  }
+    if (!targetElement || !(targetElement instanceof HTMLElement)) {
+        console.error('ReadMore: destroyReadMore requires a valid HTMLElement');
+        return false;
+    }
 
-  const instance = READMORE_INSTANCES.get(targetElement);
-  if (!instance) {
-    console.warn('ReadMore: No readmore instance found for the given element');
-    return false;
-  }
+    const instance = READMORE_INSTANCES.get(targetElement);
+    if (!instance) {
+        console.warn('ReadMore: No readmore instance found for the given element');
+        return false;
+    }
 
-  instance.destroy();
-  READMORE_INSTANCES.delete(targetElement);
-  
-  return true;
+    instance.destroy();
+    READMORE_INSTANCES.delete(targetElement);
+    
+    return true;
 }
 
 /**
@@ -91,7 +91,7 @@ function destroyReadMore(targetElement) {
  * @returns {boolean} True if element has an active readmore instance
  */
 function hasReadMoreInstance(targetElement) {
-  return READMORE_INSTANCES.has(targetElement);
+    return READMORE_INSTANCES.has(targetElement);
 }
 
 /**
@@ -101,7 +101,7 @@ function hasReadMoreInstance(targetElement) {
  * @returns {ReadMoreInstance|null} The instance or null if not found
  */
 function getReadMoreInstance(targetElement) {
-  return READMORE_INSTANCES.get(targetElement) || null;
+    return READMORE_INSTANCES.get(targetElement) || null;
 }
 
 /**
