@@ -42,7 +42,7 @@ function addStyle(styleString, cacheKey) {
     }
     
     // Check if styles with this cache key already exist in the DOM
-    const existingStyle = document.head.querySelector(`[data-readmore-cache="${cacheKey}"]`);
+    const existingStyle = document.head.querySelector(`[data-readmore-lines-cache="${cacheKey}"]`);
     if (existingStyle) {
         CSS_CACHE.add(cacheKey); // Add to cache for future reference
         return; // Styles already added, skip
@@ -50,7 +50,7 @@ function addStyle(styleString, cacheKey) {
     
     const style = document.createElement('style');
     style.textContent = styleString;
-    style.setAttribute('data-readmore-cache', cacheKey);
+    style.setAttribute('data-readmore-lines-cache', cacheKey);
     document.head.append(style);
     
     // Add to cache to prevent future duplicates
@@ -193,13 +193,13 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
     }
 
     // Prevent duplicate initialization
-    if (targetElement.classList.contains(READ_MORE_TARGET_CLASS) || targetElement.dataset.readmeEnabled === '1') {
+    if (targetElement.classList.contains(READ_MORE_TARGET_CLASS) || targetElement.dataset.readmoreLinesEnabled === '1') {
         return
     }
 
     // Add CSS styles for text truncation using webkit-line-clamp with caching
     // Create a unique cache key based on target class and line limit
-    const cssCacheKey = `readmore-styles-${READ_MORE_TARGET_CLASS}-${LINES_LIMIT}`;
+    const cssCacheKey = `readmore-lines-styles-${READ_MORE_TARGET_CLASS}-${LINES_LIMIT}`;
     addStyle(`
         .${READ_MORE_TARGET_CLASS} {
             display: -webkit-box;
@@ -248,5 +248,5 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
     })
 
     // Mark element as having readmore functionality enabled
-    targetElement.dataset.readmeEnabled = '1'
+    targetElement.dataset.readmoreLinesEnabled = '1'
 }
