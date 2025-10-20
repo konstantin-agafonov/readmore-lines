@@ -35,7 +35,7 @@ const devConfig = {
     name: 'readmore',
     format: 'umd',
     file: 'dist/readmore.js',
-    exports: 'default',
+    exports: 'named',
     sourcemap: true,
     banner
   }
@@ -48,7 +48,7 @@ const prodConfig = {
     name: 'readmore',
     format: 'umd',
     file: 'dist/readmore.min.js',
-    exports: 'default',
+    exports: 'named',
     sourcemap: false,
     banner
   },
