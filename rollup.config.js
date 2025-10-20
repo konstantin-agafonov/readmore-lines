@@ -7,12 +7,13 @@ const isProduction = process.env.NODE_ENV === 'production';
 export default {
   input: 'src/readmore.js',
   output: {
-    name: 'ReadMore',
+    name: 'readmore',
     format: 'umd',
     file: 'dist/readmore.js',
+    exports: 'default',
     sourcemap: !isProduction,
     banner: `/*!
- * ReadMore.js v1.0.0
+ * ReadMoreLines.js v1.0.0
  * A lightweight JavaScript library for creating 'read more/read less' functionality
  * (c) 2025 Konstantin Agafonov
  * Released under the MIT License
@@ -37,7 +38,7 @@ export default {
         drop_debugger: true
       },
       mangle: {
-        reserved: ['ReadMore']
+        reserved: ['readmore']
       }
     })
   ].filter(Boolean)

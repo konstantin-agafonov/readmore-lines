@@ -136,7 +136,7 @@ function countLines(element) {
  *     linesLimit: 3
  * });
  */
-export function readmore({
+function readmore({
     targetElement,
     readMoreLabel,
     readLessLabel,
