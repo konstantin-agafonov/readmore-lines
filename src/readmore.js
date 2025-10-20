@@ -375,16 +375,76 @@ function readmore({
         return;
     }
 
-    // Add CSS styles for text truncation using webkit-line-clamp with caching
+    // Ensure a local CSS scope on the container element
+    const scopeElement = targetElement.parentElement;
+    if (scopeElement && !scopeElement.hasAttribute('data-readmore-lines-scope')) {
+        scopeElement.setAttribute('data-readmore-lines-scope', '');
+    }
+
+    // Add CSS styles (scoped + themeable via CSS custom properties)
     // Create a unique cache key based on target class and line limit
     const cssCacheKey = `readmore-lines-styles-${READ_MORE_TARGET_CLASS}-${LINES_LIMIT}`;
     addStyle(`
-        .${READ_MORE_TARGET_CLASS} {
+        /*
+         * Scoped theme defaults. Override these on any ancestor with
+         * [data-readmore-lines-scope] using custom properties.
+         */
+        [data-readmore-lines-scope] {
+            --readmore-link-color: #0a84ff;
+            --readmore-link-hover-color: #0066cc;
+            --readmore-link-bg: transparent;
+            --readmore-link-hover-bg: rgba(10, 132, 255, 0.08);
+            --readmore-link-padding-y: 0.25rem;
+            --readmore-link-padding-x: 0.5rem;
+            --readmore-link-radius: 4px;
+            --readmore-link-font-weight: 600;
+            --readmore-focus-ring: 2px solid rgba(10, 132, 255, 0.35);
+            --readmore-transition: color .15s ease, background-color .15s ease;
+        }
+
+        /* Truncation styling (scoped to container) */
+        [data-readmore-lines-scope] .${READ_MORE_TARGET_CLASS} {
             display: -webkit-box;
-            overflow : hidden;
+            overflow: hidden;
             text-overflow: ellipsis;
             -webkit-line-clamp: ${LINES_LIMIT};
             -webkit-box-orient: vertical;
+        }
+
+        /* Toggle button baseline styles (accessible, themeable) */
+        [data-readmore-lines-scope] .${READ_MORE_LINK_CLASS} {
+            appearance: none;
+            -webkit-appearance: none;
+            background: var(--readmore-link-bg);
+            color: var(--readmore-link-color);
+            border: none;
+            padding: var(--readmore-link-padding-y) var(--readmore-link-padding-x);
+            margin: 0.25rem 0 0 0;
+            font: inherit;
+            font-weight: var(--readmore-link-font-weight);
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: var(--readmore-link-radius);
+            transition: var(--readmore-transition);
+            line-height: 1.25;
+            display: inline-block;
+        }
+
+        [data-readmore-lines-scope] .${READ_MORE_LINK_CLASS}:hover {
+            background: var(--readmore-link-hover-bg);
+            color: var(--readmore-link-hover-color);
+        }
+
+        [data-readmore-lines-scope] .${READ_MORE_LINK_CLASS}:focus-visible {
+            outline: var(--readmore-focus-ring);
+            outline-offset: 2px;
+        }
+
+        /* Respect reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            [data-readmore-lines-scope] .${READ_MORE_LINK_CLASS} {
+                transition: none;
+            }
         }
     `, cssCacheKey);
 
