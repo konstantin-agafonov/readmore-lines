@@ -13,9 +13,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "npm run build:umd && npm run build:esm && npm run build:types",
-    "build:umd": "rollup -c rollup.config.js --format umd --file dist/readmore.js",
-    "build:esm": "rollup -c rollup.config.js --format esm --file dist/readmore.esm.js",
+    "build": "rollup -c",
+    "build:dev": "rollup -c --config dev",
+    "build:prod": "rollup -c --config prod",
     "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist src/readmore.d.ts",
     "test": "jest",
     "lint": "eslint src/**/*.js",

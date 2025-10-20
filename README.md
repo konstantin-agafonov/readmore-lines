@@ -25,7 +25,11 @@ yarn add readmore-lines
 
 ### CDN
 ```html
+<!-- Development version (unminified) -->
 <script src="https://unpkg.com/readmore-lines@latest/dist/readmore.js"></script>
+
+<!-- Production version (minified) -->
+<script src="https://unpkg.com/readmore-lines@latest/dist/readmore.min.js"></script>
 ```
 
 ## Quick Start
@@ -132,6 +136,21 @@ You can customize the appearance by targeting the generated classes:
 - Edge 12+
 - IE 9+ (with polyfills for `WeakMap`)
 
+## Build Outputs
+
+The library provides multiple build formats for different use cases:
+
+| File | Size | Description |
+|------|------|-------------|
+| `readmore.js` | ~11KB | Development version (unminified, with sourcemap) |
+| `readmore.min.js` | ~2.5KB | Production version (minified, optimized) |
+| `readmore.esm.js` | ~10KB | ES Module version |
+
+### File Size Comparison
+- **Unminified**: ~11KB (readable, with comments)
+- **Minified**: ~2.5KB (77% size reduction)
+- **Gzipped**: ~1.2KB (estimated)
+
 ## Performance
 
 ### Caching System
@@ -196,8 +215,14 @@ readmore({
 # Install dependencies
 npm install
 
-# Build the library
+# Build all versions (development + production)
 npm run build
+
+# Build development version only (unminified)
+npm run build:dev
+
+# Build production version only (minified)
+npm run build:prod
 
 # Run tests
 npm test
@@ -214,6 +239,11 @@ readmore-lines/
 │   ├── readmore.js      # Main library file
 │   └── readmore.d.ts    # TypeScript declarations
 ├── dist/                # Built files
+│   ├── readmore.js      # Development build (unminified)
+│   ├── readmore.min.js  # Production build (minified)
+│   ├── readmore.esm.js  # ES Module build
+│   └── *.map            # Source maps
+├── tests/               # Test files
 ├── package.json
 ├── rollup.config.js
 └── README.md
