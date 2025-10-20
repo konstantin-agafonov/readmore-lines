@@ -29,7 +29,7 @@ describe('ReadMore', () => {
       readmore({ targetElement });
       
       expect(targetElement.classList.contains('read-more-target')).toBe(true);
-      expect(targetElement.dataset.readmeEnabled).toBe('1');
+      expect(targetElement.dataset.readmoreLinesEnabled).toBe('1');
     });
 
     test('should create toggle link', () => {

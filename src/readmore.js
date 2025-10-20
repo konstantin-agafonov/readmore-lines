@@ -136,7 +136,14 @@ function countLines(element) {
  *     linesLimit: 3
  * });
  */
-function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, linkClass, linesLimit}) {
+export function readmore({
+    targetElement,
+    readMoreLabel,
+    readLessLabel,
+    targetClass,
+    linkClass,
+    linesLimit
+}) {
     // Input validation for targetElement
     if (!targetElement) {
         console.error('ReadMore: targetElement is required and cannot be null or undefined');
@@ -250,3 +257,5 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
     // Mark element as having readmore functionality enabled
     targetElement.dataset.readmoreLinesEnabled = '1';
 }
+
+export default readmore;

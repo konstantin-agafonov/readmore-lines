@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Read More Lines demo page</title>
+    <script src="./dist/readmore.js"></script>
+</head>
+<body>
+
+<div id="container">
+    <div id="target" style="width: 200px; background-color: yellow;">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, quos vel! Animi corporis dolor eligendi. Hic maxime neque veniam! Aut debitis dolore incidunt laboriosam molestiae nisi, non obcaecati pariatur tempora.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, quos vel! Animi corporis dolor eligendi. Hic maxime neque veniam! Aut debitis dolore incidunt laboriosam molestiae nisi, non obcaecati pariatur tempora.
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', () => {
+        const target = document.getElementById('target');
+        ReadMore({targetElement: target});
+    });
+</script>
+</body>
+</html>
