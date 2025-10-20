@@ -105,6 +105,15 @@ export function isLineHeightCached(element: HTMLElement): boolean;
 export function invalidateLineHeightCache(element: HTMLElement): void;
 
 /**
+ * Invalidates the style cache for a specific element's configuration.
+ * This removes the CSS styles associated with the element's readmore configuration.
+ * 
+ * @param element - The element to invalidate style cache for
+ * @returns void
+ */
+export function invalidateStyleCache(element: HTMLElement): void;
+
+/**
  * ReadMore instance class for managing individual readmore functionality
  */
 export class ReadMoreInstance {

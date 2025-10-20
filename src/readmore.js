@@ -58,6 +58,9 @@ class ReadMoreInstance {
         // Clear line height cache for this element
         invalidateLineHeightCache(this.targetElement);
         
+        // Clear style cache for this element's configuration
+        invalidateStyleCache(this.targetElement);
+        
         // Mark as destroyed
         this.isDestroyed = true;
     }
@@ -81,20 +84,11 @@ function destroyReadMore(targetElement) {
         return false;
     }
 
-    // Destroy the instance (includes line height cache invalidation)
+    // Destroy the instance (includes line height and style cache invalidation)
     instance.destroy();
     
     // Remove from instance tracking
     READMORE_INSTANCES.delete(targetElement);
-    
-    // Check if we should clear CSS cache (when no more instances exist)
-    if (READMORE_INSTANCES.size === 0) {
-        // Check if any styles are still cached
-        const hasCachedStyles = document.head.querySelector('[data-readmore-lines-cache]');
-        if (hasCachedStyles) {
-            clearReadMoreCache();
-        }
-    }
     
     return true;
 }
@@ -167,6 +161,32 @@ function isLineHeightCached(element) {
 function invalidateLineHeightCache(element) {
     if (element) {
         LINE_HEIGHT_CACHE.delete(element);
+    }
+}
+
+/**
+ * Invalidates the style cache for a specific element's configuration.
+ * This removes the CSS styles associated with the element's readmore configuration.
+ *
+ * @param {HTMLElement} element - The element to invalidate style cache for
+ * @returns {void}
+ */
+function invalidateStyleCache(element) {
+    if (!element || !(element instanceof HTMLElement)) {
+        return;
+    }
+
+    const instance = READMORE_INSTANCES.get(element);
+    if (!instance) {
+        return;
+    }
+
+    const cacheKey = `readmore-lines-styles-${instance.config.targetClass}-${instance.config.linesLimit}`;
+    CSS_CACHE.delete(cacheKey);
+
+    const styleElement = document.head.querySelector(`[data-readmore-lines-cache="${cacheKey}"]`);
+    if (styleElement) {
+        styleElement.remove();
     }
 }
 
@@ -457,6 +477,7 @@ export {
     clearReadMoreCache,
     isStyleCached,
     isLineHeightCached,
-    invalidateLineHeightCache
+    invalidateLineHeightCache,
+    invalidateStyleCache
 };
 export default readmore;
