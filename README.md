@@ -214,10 +214,6 @@ import readmore, {
     destroyReadMore, 
     hasReadMoreInstance, 
     getReadMoreInstance,
-    clearReadMoreCache,
-    isStyleCached,
-    isLineHeightCached,
-    invalidateLineHeightCache
 } from 'readmore-lines';
 
 // Check if element has readmore functionality
@@ -230,19 +226,6 @@ const instance = getReadMoreInstance(element);
 if (instance) {
     console.log('Instance configuration:', instance.config);
 }
-
-// Cache management
-if (isLineHeightCached(element)) {
-    console.log('Line height is cached for this element');
-}
-
-if (isStyleCached('readmore-lines-styles-read-more-target-8')) {
-    console.log('CSS styles are cached');
-}
-
-// Invalidate line height cache when element styles change
-element.style.fontSize = '20px';
-invalidateLineHeightCache(element);
 
 // Destroy readmore functionality and clean up resources
 destroyReadMore(element);
@@ -273,9 +256,6 @@ function updateContent(element, newContent) {
 
 // Handle style changes that affect line height
 function updateElementStyles(element) {
-    // Invalidate line height cache before style changes
-    invalidateLineHeightCache(element);
-    
     // Apply new styles
     element.style.fontSize = '18px';
     element.style.lineHeight = '1.5';
