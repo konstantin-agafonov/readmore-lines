@@ -11,7 +11,7 @@ const banner = `/*!
 
 // Base configuration
 const baseConfig = {
-  input: 'src/readmore.js',
+  input: 'src/umd-entry.js',
   plugins: [
     nodeResolve(),
     babel({
@@ -35,7 +35,7 @@ const devConfig = {
     name: 'readmore',
     format: 'umd',
     file: 'dist/readmore.js',
-    exports: 'named',
+    exports: 'default',
     sourcemap: true,
     banner
   }
@@ -48,7 +48,7 @@ const prodConfig = {
     name: 'readmore',
     format: 'umd',
     file: 'dist/readmore.min.js',
-    exports: 'named',
+    exports: 'default',
     sourcemap: false,
     banner
   },
