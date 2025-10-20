@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import readmore from '../src/readmore.js';
+import readmore, { destroyReadMore, hasReadMoreInstance, getReadMoreInstance } from '../src/readmore.js';
 
 describe('ReadMore', () => {
   let container;
@@ -225,13 +225,85 @@ describe('ReadMore', () => {
   describe('Prevention of duplicate initialization', () => {
     test('should not initialize twice on same element', () => {
       readmore({ targetElement });
-      const initialLink = targetElement.nextElementSibling;
+      const initialButton = targetElement.nextElementSibling;
       
       // Try to initialize again
       readmore({ targetElement });
       
-      // Should still have only one link
-      expect(targetElement.nextElementSibling).toBe(initialLink);
+      // Should still have only one button
+      expect(targetElement.nextElementSibling).toBe(initialButton);
+    });
+  });
+
+  describe('Cleanup and instance management', () => {
+    test('should track readmore instances', () => {
+      readmore({ targetElement });
+      
+      expect(hasReadMoreInstance(targetElement)).toBe(true);
+      expect(getReadMoreInstance(targetElement)).toBeTruthy();
+    });
+
+    test('should destroy readmore instance and clean up resources', () => {
+      readmore({ targetElement });
+      
+      const button = targetElement.nextElementSibling;
+      const instance = getReadMoreInstance(targetElement);
+      
+      expect(hasReadMoreInstance(targetElement)).toBe(true);
+      expect(targetElement.classList.contains('read-more-target')).toBe(true);
+      expect(targetElement.dataset.readmoreLinesEnabled).toBe('1');
+      
+      // Destroy the instance
+      const destroyed = destroyReadMore(targetElement);
+      
+      expect(destroyed).toBe(true);
+      expect(hasReadMoreInstance(targetElement)).toBe(false);
+      expect(getReadMoreInstance(targetElement)).toBe(null);
+      expect(targetElement.classList.contains('read-more-target')).toBe(false);
+      expect(targetElement.dataset.readmoreLinesEnabled).toBeUndefined();
+      expect(button.parentNode).toBeNull(); // Button should be removed from DOM
+    });
+
+    test('should handle destroying non-existent instance', () => {
+      const destroyed = destroyReadMore(targetElement);
+      expect(destroyed).toBe(false);
+    });
+
+    test('should prevent duplicate initialization after destruction', () => {
+      readmore({ targetElement });
+      destroyReadMore(targetElement);
+      
+      // Should be able to initialize again
+      readmore({ targetElement });
+      expect(hasReadMoreInstance(targetElement)).toBe(true);
+    });
+
+    test('should clean up event listeners on destroy', () => {
+      readmore({ targetElement });
+      const instance = getReadMoreInstance(targetElement);
+      
+      // Mock the removeEventListener method
+      const removeEventListenerSpy = jest.spyOn(instance.button, 'removeEventListener');
+      
+      destroyReadMore(targetElement);
+      
+      // Should have called removeEventListener for each event type
+      expect(removeEventListenerSpy).toHaveBeenCalledWith('click', expect.any(Function));
+      expect(removeEventListenerSpy).toHaveBeenCalledWith('keydown', expect.any(Function));
+      
+      removeEventListenerSpy.mockRestore();
+    });
+
+    test('should handle destroying with invalid element', () => {
+      const consoleSpy = jest.spyOn(console, 'error');
+      
+      destroyReadMore(null);
+      expect(consoleSpy).toHaveBeenCalledWith('ReadMore: destroyReadMore requires a valid HTMLElement');
+      
+      destroyReadMore('invalid');
+      expect(consoleSpy).toHaveBeenCalledWith('ReadMore: destroyReadMore requires a valid HTMLElement');
+      
+      consoleSpy.mockRestore();
     });
   });
 });

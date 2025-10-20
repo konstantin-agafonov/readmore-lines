@@ -47,5 +47,43 @@ export interface ReadMoreOptions {
  */
 export function readmore(options: ReadMoreOptions): void;
 
+/**
+ * Destroys a readmore instance and cleans up all associated resources.
+ * 
+ * @param targetElement - The target element that had readmore functionality
+ * @returns True if instance was found and destroyed, false otherwise
+ */
+export function destroyReadMore(targetElement: HTMLElement): boolean;
+
+/**
+ * Checks if an element has an active readmore instance.
+ * 
+ * @param targetElement - The element to check
+ * @returns True if element has an active readmore instance
+ */
+export function hasReadMoreInstance(targetElement: HTMLElement): boolean;
+
+/**
+ * Gets the readmore instance for an element.
+ * 
+ * @param targetElement - The element to get instance for
+ * @returns The instance or null if not found
+ */
+export function getReadMoreInstance(targetElement: HTMLElement): ReadMoreInstance | null;
+
+/**
+ * ReadMore instance class for managing individual readmore functionality
+ */
+export class ReadMoreInstance {
+  constructor(targetElement: HTMLElement, button: HTMLButtonElement, config: any);
+  addEventListener(type: string, listener: EventListener): void;
+  removeAllEventListeners(): void;
+  destroy(): void;
+  readonly targetElement: HTMLElement;
+  readonly button: HTMLButtonElement;
+  readonly config: any;
+  readonly isDestroyed: boolean;
+}
+
 // Default export
 export default readmore;

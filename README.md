@@ -207,6 +207,47 @@ readmore({
 </script>
 ```
 
+### Cleanup and Instance Management
+
+```javascript
+import readmore, { destroyReadMore, hasReadMoreInstance, getReadMoreInstance } from 'readmore-lines';
+
+// Check if element has readmore functionality
+if (hasReadMoreInstance(element)) {
+    console.log('Element has readmore functionality');
+}
+
+// Get the instance for advanced control
+const instance = getReadMoreInstance(element);
+if (instance) {
+    console.log('Instance configuration:', instance.config);
+}
+
+// Destroy readmore functionality and clean up resources
+destroyReadMore(element);
+```
+
+### Dynamic Content Management
+
+```javascript
+// Handle dynamic content updates
+function updateContent(element, newContent) {
+    // Destroy existing readmore if present
+    if (hasReadMoreInstance(element)) {
+        destroyReadMore(element);
+    }
+    
+    // Update content
+    element.innerHTML = newContent;
+    
+    // Reapply readmore functionality
+    readmore({
+        targetElement: element,
+        linesLimit: 4
+    });
+}
+```
+
 ## Development
 
 ### Building

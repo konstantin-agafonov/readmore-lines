@@ -13,6 +13,97 @@ const CSS_CACHE = new Set();
 // Global cache to store computed line heights for elements
 const LINE_HEIGHT_CACHE = new WeakMap();
 
+// Instance management - track active readmore instances
+const READMORE_INSTANCES = new WeakMap();
+
+/**
+ * Instance data structure for tracking readmore instances
+ */
+class ReadMoreInstance {
+  constructor(targetElement, button, config) {
+    this.targetElement = targetElement;
+    this.button = button;
+    this.config = config;
+    this.eventListeners = new Map();
+    this.isDestroyed = false;
+  }
+
+  addEventListener(type, listener) {
+    this.button.addEventListener(type, listener);
+    this.eventListeners.set(type, listener);
+  }
+
+  removeAllEventListeners() {
+    this.eventListeners.forEach((listener, type) => {
+      this.button.removeEventListener(type, listener);
+    });
+    this.eventListeners.clear();
+  }
+
+  destroy() {
+    if (this.isDestroyed) return;
+    
+    // Remove event listeners
+    this.removeAllEventListeners();
+    
+    // Remove button from DOM
+    if (this.button && this.button.parentNode) {
+      this.button.parentNode.removeChild(this.button);
+    }
+    
+    // Remove classes and data attributes
+    this.targetElement.classList.remove(this.config.targetClass);
+    delete this.targetElement.dataset.readmoreLinesEnabled;
+    
+    // Mark as destroyed
+    this.isDestroyed = true;
+  }
+}
+
+/**
+ * Destroys a readmore instance and cleans up all associated resources.
+ * 
+ * @param {HTMLElement} targetElement - The target element that had readmore functionality
+ * @returns {boolean} True if instance was found and destroyed, false otherwise
+ */
+function destroyReadMore(targetElement) {
+  if (!targetElement || !(targetElement instanceof HTMLElement)) {
+    console.error('ReadMore: destroyReadMore requires a valid HTMLElement');
+    return false;
+  }
+
+  const instance = READMORE_INSTANCES.get(targetElement);
+  if (!instance) {
+    console.warn('ReadMore: No readmore instance found for the given element');
+    return false;
+  }
+
+  instance.destroy();
+  READMORE_INSTANCES.delete(targetElement);
+  
+  return true;
+}
+
+/**
+ * Checks if an element has an active readmore instance.
+ * 
+ * @param {HTMLElement} targetElement - The element to check
+ * @returns {boolean} True if element has an active readmore instance
+ */
+function hasReadMoreInstance(targetElement) {
+  return READMORE_INSTANCES.has(targetElement);
+}
+
+/**
+ * Gets the readmore instance for an element.
+ * 
+ * @param {HTMLElement} targetElement - The element to get instance for
+ * @returns {ReadMoreInstance|null} The instance or null if not found
+ */
+function getReadMoreInstance(targetElement) {
+  return READMORE_INSTANCES.get(targetElement) || null;
+}
+
 /**
  * Utility function to add CSS styles to the document head with caching.
  * This function creates a new style element and appends it to the document head,
@@ -192,8 +283,9 @@ function readmore({
         return;
     }
 
-    // Prevent duplicate initialization
-    if (targetElement.classList.contains(READ_MORE_TARGET_CLASS) || targetElement.dataset.readmoreLinesEnabled === '1') {
+    // Check if element already has a readmore instance
+    if (hasReadMoreInstance(targetElement)) {
+        console.warn('ReadMore: Element already has readmore functionality. Use destroyReadMore() first to reinitialize.');
         return;
     }
 
@@ -236,6 +328,18 @@ function readmore({
         console.error('ReadMore: Failed to insert toggle link', error);
     }
     
+    // Create instance configuration
+    const instanceConfig = {
+        targetClass: READ_MORE_TARGET_CLASS,
+        linkClass: READ_MORE_LINK_CLASS,
+        readMoreLabel: READ_MORE_LABEL,
+        readLessLabel: READ_LESS_LABEL,
+        linesLimit: LINES_LIMIT
+    };
+
+    // Create readmore instance
+    const instance = new ReadMoreInstance(targetElement, readMoreLink, instanceConfig);
+
     // Toggle functionality
     const toggleContent = () => {
         // Toggle the truncation class
@@ -254,22 +358,31 @@ function readmore({
     };
 
     // Add click event listener for toggle functionality
-    readMoreLink.addEventListener('click', (event) => {
+    const clickHandler = (event) => {
         event.preventDefault();
         toggleContent();
-    });
+    };
 
     // Add keyboard event listener for accessibility
-    readMoreLink.addEventListener('keydown', (event) => {
+    const keydownHandler = (event) => {
         // Handle Enter and Space keys
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             toggleContent();
         }
-    });
+    };
+
+    // Register event listeners through instance management
+    instance.addEventListener('click', clickHandler);
+    instance.addEventListener('keydown', keydownHandler);
+
+    // Store instance for cleanup
+    READMORE_INSTANCES.set(targetElement, instance);
 
     // Mark element as having readmore functionality enabled
     targetElement.dataset.readmoreLinesEnabled = '1';
 }
 
+// Export all functions
+export { destroyReadMore, hasReadMoreInstance, getReadMoreInstance };
 export default readmore;
