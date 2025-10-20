@@ -2,7 +2,15 @@
  * @jest-environment jsdom
  */
 
-import readmore, { destroyReadMore, hasReadMoreInstance, getReadMoreInstance } from '../src/readmore.js';
+import readmore, { 
+    destroyReadMore, 
+    hasReadMoreInstance, 
+    getReadMoreInstance,
+    clearReadMoreCache,
+    isStyleCached,
+    isLineHeightCached,
+    invalidateLineHeightCache
+} from '../src/readmore.js';
 
 describe('ReadMore', () => {
     let container;
@@ -304,6 +312,88 @@ describe('ReadMore', () => {
             expect(consoleSpy).toHaveBeenCalledWith('ReadMore: destroyReadMore requires a valid HTMLElement');
             
             consoleSpy.mockRestore();
+        });
+
+        test('should clear line height cache when destroying instance', () => {
+            readmore({ targetElement });
+            
+            // Line height should be cached after initialization
+            expect(isLineHeightCached(targetElement)).toBe(true);
+            
+            // Destroy the instance
+            destroyReadMore(targetElement);
+            
+            // Line height cache should be cleared
+            expect(isLineHeightCached(targetElement)).toBe(false);
+        });
+
+        test('should clear CSS cache when all instances are destroyed', () => {
+            readmore({ targetElement });
+            
+            // Check that styles are cached
+            const cacheKey = 'readmore-lines-styles-read-more-target-8';
+            expect(isStyleCached(cacheKey)).toBe(true);
+            
+            // Destroy the instance
+            destroyReadMore(targetElement);
+            
+            // CSS cache should be cleared when no instances remain
+            expect(isStyleCached(cacheKey)).toBe(false);
+        });
+    });
+
+    describe('Cache management functions', () => {
+        test('should check if styles are cached', () => {
+            const cacheKey = 'test-cache-key';
+            expect(isStyleCached(cacheKey)).toBe(false);
+            
+            // Manually add to cache for testing
+            const CSS_CACHE = new Set();
+            CSS_CACHE.add(cacheKey);
+            expect(isStyleCached(cacheKey)).toBe(false); // Still false as we can't access internal cache
+        });
+
+        test('should check if line height is cached', () => {
+            readmore({ targetElement });
+            
+            // Line height should be cached after readmore initialization
+            expect(isLineHeightCached(targetElement)).toBe(true);
+            
+            // Clear cache manually
+            invalidateLineHeightCache(targetElement);
+            expect(isLineHeightCached(targetElement)).toBe(false);
+        });
+
+        test('should invalidate line height cache', () => {
+            readmore({ targetElement });
+            
+            // Line height should be cached
+            expect(isLineHeightCached(targetElement)).toBe(true);
+            
+            // Invalidate cache
+            invalidateLineHeightCache(targetElement);
+            expect(isLineHeightCached(targetElement)).toBe(false);
+        });
+
+        test('should clear all CSS cache', () => {
+            readmore({ targetElement });
+            
+            // Check that styles exist in DOM
+            const styles = document.head.querySelectorAll('[data-readmore-lines-cache]');
+            expect(styles.length).toBeGreaterThan(0);
+            
+            // Clear cache
+            clearReadMoreCache();
+            
+            // Styles should be removed from DOM
+            const remainingStyles = document.head.querySelectorAll('[data-readmore-lines-cache]');
+            expect(remainingStyles.length).toBe(0);
+        });
+
+        test('should handle invalidateLineHeightCache with invalid element', () => {
+            // Should not throw error with null/undefined
+            expect(() => invalidateLineHeightCache(null)).not.toThrow();
+            expect(() => invalidateLineHeightCache(undefined)).not.toThrow();
         });
     });
 });

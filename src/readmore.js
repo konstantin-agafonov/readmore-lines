@@ -55,6 +55,9 @@ class ReadMoreInstance {
         this.targetElement.classList.remove(this.config.targetClass);
         delete this.targetElement.dataset.readmoreLinesEnabled;
         
+        // Clear line height cache for this element
+        invalidateLineHeightCache(this.targetElement);
+        
         // Mark as destroyed
         this.isDestroyed = true;
     }
@@ -78,8 +81,21 @@ function destroyReadMore(targetElement) {
         return false;
     }
 
+    // Destroy the instance (includes line height cache invalidation)
     instance.destroy();
+    
+    // Remove from instance tracking
     READMORE_INSTANCES.delete(targetElement);
+    
+    // Check if we should clear CSS cache (when no more instances exist)
+    if (READMORE_INSTANCES.size === 0) {
+        // Check if any styles are still cached
+        const hasCachedStyles = document.head.querySelector('[data-readmore-lines-cache]');
+        if (hasCachedStyles) {
+            console.log('ReadMore: All instances destroyed, clearing CSS cache');
+            clearReadMoreCache();
+        }
+    }
     
     return true;
 }
@@ -102,6 +118,57 @@ function hasReadMoreInstance(targetElement) {
  */
 function getReadMoreInstance(targetElement) {
     return READMORE_INSTANCES.get(targetElement) || null;
+}
+
+/**
+ * Clears the CSS cache and removes all readmore styles from the document.
+ * This function can be used to reset the library state.
+ *
+ * @returns {void}
+ */
+function clearReadMoreCache() {
+    // Remove all readmore style elements from the document
+    const readmoreStyles = document.head.querySelectorAll('[data-readmore-cache]');
+    readmoreStyles.forEach(style => style.remove());
+
+    // Clear the CSS cache
+    CSS_CACHE.clear();
+
+    // Note: Line height cache uses WeakMap which is automatically garbage collected
+    // when elements are removed from the DOM, so no manual clearing is needed
+}
+
+/**
+ * Checks if CSS styles for a specific configuration are already cached.
+ *
+ * @param {string} cacheKey - The cache key to check
+ * @returns {boolean} True if styles are cached, false otherwise
+ */
+function isStyleCached(cacheKey) {
+    return CSS_CACHE.has(cacheKey);
+}
+
+/**
+ * Checks if line height is cached for a specific element.
+ *
+ * @param {HTMLElement} element - The element to check
+ * @returns {boolean} True if line height is cached, false otherwise
+ */
+function isLineHeightCached(element) {
+    return LINE_HEIGHT_CACHE.has(element);
+}
+
+/**
+ * Invalidates the line height cache for an element.
+ * This should be called when an element's styles change and line height needs recalculation.
+ *
+ * @param {HTMLElement} element - The element to invalidate cache for
+ * @returns {void}
+ */
+function invalidateLineHeightCache(element) {
+    if (element) {
+        LINE_HEIGHT_CACHE.delete(element);
+    }
 }
 
 /**
@@ -384,5 +451,13 @@ function readmore({
 }
 
 // Export all functions
-export { destroyReadMore, hasReadMoreInstance, getReadMoreInstance };
+export { 
+    destroyReadMore, 
+    hasReadMoreInstance, 
+    getReadMoreInstance,
+    clearReadMoreCache,
+    isStyleCached,
+    isLineHeightCached,
+    invalidateLineHeightCache
+};
 export default readmore;
