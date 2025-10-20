@@ -32,6 +32,20 @@ yarn add readmore-lines
 <script src="https://unpkg.com/readmore-lines@latest/dist/readmore.min.js"></script>
 ```
 
+### UMD usage (script tag)
+
+When using the UMD build via a script tag, the global is a callable function. Call it as `readmore(...)`:
+
+```html
+<div id="my-text">Long content here...</div>
+<script src="./dist/readmore.js"></script>
+<script>
+  readmore({ targetElement: document.getElementById('my-text'), linesLimit: 4 });
+  // Utilities are available on the same namespace:
+  // readmore.destroyReadMore(...)
+</script>
+```
+
 ## Quick Start
 
 ### Basic Usage
