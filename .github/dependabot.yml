@@ -6,7 +6,7 @@ updates:
     schedule:
       interval: weekly
       day: sunday
-      time: 04:00
+      time: "04:00"
       timezone: UTC
     allow:
       - dependency-type: all
@@ -28,7 +28,7 @@ updates:
     schedule:
       interval: weekly
       day: sunday
-      time: 04:30
+      time: "04:30"
       timezone: UTC
     open-pull-requests-limit: 5
     labels:
