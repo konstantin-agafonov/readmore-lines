@@ -90,15 +90,15 @@ function countLines(element) {
         return NaN;
     }
     
-    const divHeight = element.offsetHeight
-    const lineHeight = getLineHeight(element)
+    const divHeight = element.offsetHeight;
+    const lineHeight = getLineHeight(element);
     
     // Return NaN if either height or line height cannot be determined
     if (isNaN(lineHeight) || isNaN(divHeight) || lineHeight <= 0 || divHeight <= 0) {
-        return NaN
+        return NaN;
     }
     
-    return Math.round(divHeight / lineHeight)
+    return Math.round(divHeight / lineHeight);
 }
 
 /**
@@ -181,20 +181,20 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
     }
     
     // Set default values for configuration options
-    const LINES_LIMIT = linesLimit || 8
-    const READ_MORE_LINK_CLASS = linkClass || 'read-more-link'
-    const READ_MORE_TARGET_CLASS = targetClass || 'read-more-target'
-    const READ_MORE_LABEL = readMoreLabel || 'Read more...'
-    const READ_LESS_LABEL = readLessLabel || 'Read less'
+    const LINES_LIMIT = linesLimit || 8;
+    const READ_MORE_LINK_CLASS = linkClass || 'read-more-link';
+    const READ_MORE_TARGET_CLASS = targetClass || 'read-more-target';
+    const READ_MORE_LABEL = readMoreLabel || 'Read more...';
+    const READ_LESS_LABEL = readLessLabel || 'Read less';
 
     // Early return if content doesn't exceed the line limit
     if (countLines(targetElement) < LINES_LIMIT) {
-        return
+        return;
     }
 
     // Prevent duplicate initialization
     if (targetElement.classList.contains(READ_MORE_TARGET_CLASS) || targetElement.dataset.readmoreLinesEnabled === '1') {
-        return
+        return;
     }
 
     // Add CSS styles for text truncation using webkit-line-clamp with caching
@@ -211,10 +211,10 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
     `, cssCacheKey);
 
     // Create the toggle link element
-    const readMoreLink = document.createElement('a')
-    readMoreLink.href = '#'
-    readMoreLink.innerText = READ_MORE_LABEL
-    readMoreLink.classList.add(READ_MORE_LINK_CLASS)
+    const readMoreLink = document.createElement('a');
+    readMoreLink.href = '#';
+    readMoreLink.innerText = READ_MORE_LABEL;
+    readMoreLink.classList.add(READ_MORE_LINK_CLASS);
 
     // Use requestAnimationFrame for smooth DOM operations
     requestAnimationFrame(() => {
@@ -231,7 +231,7 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
     
     // Add click event listener for toggle functionality
     readMoreLink.addEventListener('click', (event) => {
-        event.preventDefault()
+        event.preventDefault();
         
         // Use requestAnimationFrame for smooth DOM updates
         requestAnimationFrame(() => {
@@ -248,5 +248,5 @@ function readmore({targetElement, readMoreLabel, readLessLabel, targetClass, lin
     })
 
     // Mark element as having readmore functionality enabled
-    targetElement.dataset.readmoreLinesEnabled = '1'
+    targetElement.dataset.readmoreLinesEnabled = '1';
 }
