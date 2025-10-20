@@ -92,7 +92,6 @@ function destroyReadMore(targetElement) {
         // Check if any styles are still cached
         const hasCachedStyles = document.head.querySelector('[data-readmore-lines-cache]');
         if (hasCachedStyles) {
-            console.log('ReadMore: All instances destroyed, clearing CSS cache');
             clearReadMoreCache();
         }
     }
@@ -128,7 +127,7 @@ function getReadMoreInstance(targetElement) {
  */
 function clearReadMoreCache() {
     // Remove all readmore style elements from the document
-    const readmoreStyles = document.head.querySelectorAll('[data-readmore-cache]');
+    const readmoreStyles = document.head.querySelectorAll('[data-readmore-lines-cache]');
     readmoreStyles.forEach(style => style.remove());
 
     // Clear the CSS cache
