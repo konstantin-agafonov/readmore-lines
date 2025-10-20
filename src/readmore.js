@@ -14,19 +14,6 @@ const CSS_CACHE = new Set();
 const LINE_HEIGHT_CACHE = new WeakMap();
 
 /**
- * Invalidates the line height cache for an element.
- * This should be called when an element's styles change and line height needs recalculation.
- * 
- * @param {HTMLElement} element - The element to invalidate cache for
- * @returns {void}
- */
-function invalidateLineHeightCache(element) {
-    if (element) {
-        LINE_HEIGHT_CACHE.delete(element);
-    }
-}
-
-/**
  * Utility function to add CSS styles to the document head with caching.
  * This function creates a new style element and appends it to the document head,
  * but only if the styles haven't been added before.
