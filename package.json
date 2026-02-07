@@ -1,6 +1,6 @@
 {
   "name": "readmore-lines",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight JavaScript library for creating 'read more/read less' functionality with text truncation",
   "type": "module",
   "main": "dist/readmore.js",
