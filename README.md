@@ -389,6 +389,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - TypeScript support
 - Comprehensive documentation
 
+### v1.0.1
+- Contents in readme
+- Updated dependencies
+- Fix in build process
+
 ## Support
 
 If you encounter any issues or have questions, please file an issue on [GitHub](https://github.com/konstantin-agafonov/readmore-lines/issues).
