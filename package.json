@@ -14,8 +14,8 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "build:dev": "rollup -c --config dev",
-    "build:prod": "rollup -c --config prod",
+    "build:dev": "rollup -c --environment BUILD:dev",
+    "build:prod": "rollup -c --environment BUILD:prod",
     "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist src/readmore.d.ts",
     "test": "jest",
     "lint": "eslint src/**/*.js",
