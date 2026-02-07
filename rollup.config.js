@@ -71,4 +71,9 @@ const prodConfig = {
   ]
 };
 
-export default [devConfig, prodConfig];
+const buildProfile = process.env.BUILD;
+export default buildProfile === 'prod'
+  ? prodConfig
+  : buildProfile === 'dev'
+    ? devConfig
+    : [devConfig, prodConfig];
