@@ -2,6 +2,45 @@
 
 A lightweight, high-performance JavaScript library for creating "read more/read less" functionality with text truncation. Features automatic caching, smooth animations, and comprehensive browser support.
 
+## Contents
+
+- [Features](#features)
+- [Installation](#installation)
+  - [npm](#npm)
+  - [yarn](#yarn)
+  - [CDN](#cdn)
+  - [UMD usage (script tag)](#umd-usage-script-tag)
+- [Quick Start](#quick-start)
+  - [Basic Usage](#basic-usage)
+- [API Reference](#api-reference)
+  - [`readmore(options)`](#readmoreoptions)
+- [Styling](#styling)
+  - [Default Styles](#default-styles)
+  - [Custom Styling](#custom-styling)
+- [Accessibility Features](#accessibility-features)
+  - [ARIA Support](#aria-support)
+  - [Keyboard Navigation](#keyboard-navigation)
+  - [Semantic HTML](#semantic-html)
+- [Browser Support](#browser-support)
+- [Build Outputs](#build-outputs)
+  - [File Size Comparison](#file-size-comparison)
+- [Performance](#performance)
+  - [Caching System](#caching-system)
+  - [Optimization Features](#optimization-features)
+- [Examples](#examples)
+  - [Multiple Elements](#multiple-elements)
+  - [Custom Styling](#custom-styling-1)
+  - [Cleanup and Instance Management](#cleanup-and-instance-management)
+  - [Dynamic Content Management](#dynamic-content-management)
+- [Development](#development)
+  - [Building](#building)
+  - [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Changelog](#changelog)
+  - [v1.0.0](#v100)
+- [Support](#support)
+
 ## Features
 
 - 🚀 **High Performance**: Cached line height calculations and CSS styles
