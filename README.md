@@ -1,6 +1,8 @@
 # ReadMore.js
 
-A lightweight, high-performance JavaScript library for creating "read more/read less" functionality with text truncation. Features automatic caching, smooth animations, and comprehensive browser support.
+A lightweight, high-performance JavaScript library for creating "read more/read less" functionality with text truncation. Unlike other readmore libraries this one is **based on number of lines of text** instead of number of words or symbols. Features automatic caching, smooth animations, and comprehensive browser support.
+
+![readmore-lines library demo gif](https://github.com/konstantin-agafonov/readmore-lines/blob/main/readmore.demo.gif?raw=true)
 
 ## Contents
 
