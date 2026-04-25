@@ -1,0 +1,68 @@
+{
+  "name": "readmore-lines",
+  "version": "1.0.3",
+  "description": "A lightweight JavaScript library for creating 'read more/read less' functionality with text truncation",
+  "type": "module",
+  "main": "dist/readmore.js",
+  "module": "src/readmore.js",
+  "types": "dist/readmore.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "build:dev": "rollup -c --environment BUILD:dev",
+    "build:prod": "rollup -c --environment BUILD:prod",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist src/readmore.d.ts",
+    "test": "jest",
+    "lint": "eslint src/**/*.js",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "readmore",
+    "text-truncation",
+    "read-less",
+    "expandable-text",
+    "javascript",
+    "dom",
+    "utility",
+    "library"
+  ],
+  "author": "Konstantin Agafonov",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/konstantin-agafonov/readmore-lines.git"
+  },
+  "bugs": {
+    "url": "https://github.com/konstantin-agafonov/readmore-lines/issues"
+  },
+  "homepage": "https://github.com/konstantin-agafonov/readmore-lines#readme",
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.0",
+    "@rollup/plugin-babel": "^7.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "babel-jest": "^30.3.0",
+    "eslint": "^10.0.3",
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0",
+    "rollup": "^4.59.0",
+    "typescript": "^5.2.2"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "overrides": {
+    "test-exclude": "^8.0.0"
+  }
+}
