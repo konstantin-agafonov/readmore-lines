@@ -52,7 +52,7 @@
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "rollup": "^4.62.2",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "browserslist": [
     "> 1%",
