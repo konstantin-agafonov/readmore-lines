@@ -51,7 +51,7 @@
     "eslint": "^10.8.0",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
-    "rollup": "^4.62.2",
+    "rollup": "^4.62.4",
     "typescript": "^7.0.2"
   },
   "browserslist": [
