@@ -377,44 +377,6 @@ readmore-lines/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## Publishing a new version
-
-All release steps are automated with `make`. The full release is a single command:
-
-```bash
-make publish
-```
-
-It will: build `dist/`, copy types, run tests, show the package tarball contents (`npm pack --dry-run`), bump the version, publish to npm, and push the version commit + `v<version>` tag.
-
-### Prerequisites (once)
-
-```bash
-npm login          # required, publish fails otherwise
-```
-
-### Commands
-
-| Command | Description |
-| --- | --- |
-| `make publish` | Full release: check → bump → `npm publish` → push tag |
-| `make check` | Build + test + `npm pack --dry-run` (inspect contents) |
-| `make bump` | Bump version only: `npm version patch` |
-| `make build` | Build `dist/` and copy types (`npm run build && npm run build:types`) |
-| `make test` | Run jest tests |
-| `make tag` | Push version commit and tag to origin |
-
-### Options
-
-- Bump type: `make publish VERSION_TYPE=minor` (default `patch`), also `major`.
-- `VERSION_TYPE` applies to any target that bumps: `make bump VERSION_TYPE=minor`.
-
-### Notes
-
-- The working tree must be clean before bumping (commit your changes first).
-- `npm publish` runs `prepublishOnly` (`build` → `build:types` → `test`) automatically, so `dist/` is always fresh even though it is gitignored.
-- Only the version bump commit and tag are pushed; feature branches must be pushed/merged manually.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
