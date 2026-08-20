@@ -16,10 +16,10 @@
     "build": "rollup -c",
     "build:dev": "rollup -c --environment BUILD:dev",
     "build:prod": "rollup -c --environment BUILD:prod",
-    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist src/readmore.d.ts",
+    "build:types": "cp src/readmore.d.ts dist/readmore.d.ts",
     "test": "jest",
     "lint": "eslint src/**/*.js",
-    "prepublishOnly": "npm run build && npm test"
+    "prepublishOnly": "npm run build && npm run build:types && npm test"
   },
   "keywords": [
     "readmore",
