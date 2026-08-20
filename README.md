@@ -383,6 +383,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Changelog
 
+### v1.0.5
+- Updated dependencies
+- Fix `npm build:types` command
+
 ### v1.0.4
 - Updated dependencies
 - Minor fixes
