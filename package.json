@@ -42,8 +42,8 @@
   },
   "homepage": "https://github.com/konstantin-agafonov/readmore-lines#readme",
   "devDependencies": {
-    "@babel/core": "^8.0.1",
-    "@babel/preset-env": "^8.0.2",
+    "@babel/core": "^8.0.5",
+    "@babel/preset-env": "^8.0.5",
     "@rollup/plugin-babel": "^7.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
@@ -51,7 +51,7 @@
     "eslint": "^10.10.0",
     "jest": "^30.5.1",
     "jest-environment-jsdom": "^30.5.1",
-    "rollup": "^4.63.1",
+    "rollup": "^4.63.3",
     "typescript": "^7.0.2"
   },
   "browserslist": [
