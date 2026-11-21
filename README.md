@@ -1,4 +1,4 @@
-# ReadMore.js
+# Readmore based on text lines count
 
 A lightweight, high-performance JavaScript library for creating "read more/read less" functionality with text truncation. Unlike other readmore libraries this one is **based on number of lines of text** instead of number of words or symbols. Features automatic caching, smooth animations, and comprehensive browser support.
 
@@ -382,6 +382,9 @@ readmore-lines/
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Changelog
+
+### v1.0.6
+- Updated dependencies
 
 ### v1.0.5
 - Updated dependencies
