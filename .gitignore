@@ -80,3 +80,5 @@ pids/
 
 # DynamoDB Local files
 .dynamodb/
+
+.playwright-mcp
